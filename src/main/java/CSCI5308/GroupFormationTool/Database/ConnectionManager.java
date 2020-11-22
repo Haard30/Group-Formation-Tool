@@ -4,31 +4,33 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import CSCI5308.GroupFormationTool.Injector;
-
 public class ConnectionManager {
-	private static ConnectionManager instance = null;
-	private IDBConfiguration dbConfiguration;
 
-	private String url;
-	private String userName;
-	private String password;
+    private static ConnectionManager instance = null;
 
-	private ConnectionManager() {
-		dbConfiguration = Injector.instance().getDbConfiguration();
-		url = dbConfiguration.getDBURL();
-		userName = dbConfiguration.getDBUserName();
-		password = dbConfiguration.getDBPassword();
-	}
+    private IDBConfiguration dbConfiguration;
 
-	public static ConnectionManager instance() {
-		if (null == instance) {
-			instance = new ConnectionManager();
-		}
-		return instance;
-	}
+    private String url;
 
-	public Connection getDBConnection() throws SQLException {
-		return DriverManager.getConnection(url, userName, password);
-	}
+    private String userName;
+
+    private String password;
+
+    private ConnectionManager() {
+        dbConfiguration = DatabaseInjector.instance().getDbConfiguration();
+        url = dbConfiguration.getDBURL();
+        userName = dbConfiguration.getDBUserName();
+        password = dbConfiguration.getDBPassword();
+    }
+
+    public static ConnectionManager instance() {
+        if (instance == null) {
+            instance = new ConnectionManager();
+        }
+        return instance;
+    }
+
+    public Connection getDBConnection() throws SQLException {
+        return DriverManager.getConnection(url, userName, password);
+    }
 }
